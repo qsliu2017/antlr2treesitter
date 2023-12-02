@@ -1,0 +1,32 @@
+plugins {
+    id 'application'
+    id 'antlr'
+}
+
+repositories {
+    mavenCentral()
+}
+
+tasks.named('generateGrammarSource') {
+    maxHeapSize = '64m'
+    outputDirectory = file("${projectDir}/src/main/java/com/github/qsliu2017/antlr2treesitter/parser")
+    arguments += [
+        '-package', 'com.github.qsliu2017.antlr2treesitter.parser',
+        '-o', 'src/main/java/com/github/qsliu2017/antlr2treesitter/parser', '-Xexact-output-dir',
+        '-listener', '-no-visitor',
+    ]
+}
+
+dependencies {
+    // Use JUnit test framework.
+    testImplementation 'junit:junit:4.13'
+
+    antlr "org.antlr:antlr4:4.13.1"
+
+    // This dependency is used by the application.
+    implementation 'com.google.guava:guava:29.0-jre'
+}
+
+application {
+    mainClass = 'com.github.qsliu2017.antlr2treesitter.App'
+}
