@@ -3,12 +3,38 @@
  */
 package com.github.qsliu2017.antlr2treesitter;
 
+import com.github.qsliu2017.antlr2treesitter.parser.ANTLRv4Lexer;
+import com.github.qsliu2017.antlr2treesitter.parser.ANTLRv4Parser;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.TokenStream;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.io.*;
 
 public class AppTest {
-    @Test public void testAppHasAGreeting() {
-        App classUnderTest = new App();
-        assertNotNull("app should have a greeting", classUnderTest.getGreeting());
+    @Test
+    public void testParse() {
+        String s = "// define a grammar called Hello\n" + //
+                "grammar Hello;\n" + //
+                "r   : 'hello' ID;\n" + //
+                "ID  : [a-z]+ ;\n" + //
+                "WS  : [ \\t\\r\\n" + //
+                "]+ -> skip ;";
+        App.transform(s);
+    }
+
+    @Test
+    public void testParsePlSqlParser() throws IOException {
+        CharStream input = CharStreams.fromFileName("src/test/resources/PlSqlParser.g4");
+        TokenStream tokens = new CommonTokenStream(new ANTLRv4Lexer(input));
+        ANTLRv4Parser parser = new ANTLRv4Parser(tokens);
+        Transformer t = new Transformer();
+        parser.addParseListener(t);
+//        parser.setTrace(true);
+        // parser.setBuildParseTree(true);
+        parser.grammarSpec();
+        System.out.println(t);
     }
 }

@@ -12,7 +12,6 @@ tasks.named('generateGrammarSource') {
     outputDirectory = file("${projectDir}/src/main/java/com/github/qsliu2017/antlr2treesitter/parser")
     arguments += [
         '-package', 'com.github.qsliu2017.antlr2treesitter.parser',
-        '-o', 'src/main/java/com/github/qsliu2017/antlr2treesitter/parser', '-Xexact-output-dir',
         '-listener', '-no-visitor',
     ]
 }

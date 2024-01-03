@@ -3,12 +3,34 @@
  */
 package com.github.qsliu2017.antlr2treesitter;
 
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.TokenStream;
+
+import com.github.qsliu2017.antlr2treesitter.parser.ANTLRv4Lexer;
+import com.github.qsliu2017.antlr2treesitter.parser.ANTLRv4Parser;
+
 public class App {
-    public String getGreeting() {
-        return "Hello World!";
+    public static String transform(String s) {
+        CharStream input = CharStreams.fromString(s);
+        TokenStream tokens = new CommonTokenStream(new ANTLRv4Lexer(input));
+        ANTLRv4Parser parser = new ANTLRv4Parser(tokens);
+        Transformer t = new Transformer();
+        parser.addParseListener(t);
+        // parser.setTrace(true);
+        // parser.setBuildParseTree(true);
+        parser.grammarSpec();
+        System.out.println(t);
+        return "";
     }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        String s = "// define a grammar called Hello\n" + //
+                "grammar Hello;\n" + //
+                "r   : 'hello' ID;\n" + //
+                "ID  : [a-z]+ ;\n" + //
+                "WS  : [ \\t\\r\\n]+ -> skip ;";
+        App.transform(s);
     }
 }
